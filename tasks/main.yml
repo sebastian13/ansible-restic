@@ -1,4 +1,8 @@
 ---
+
+- include: 'clean.yml'
+- include: 'requirements.yml'
+
 - name: Ensure restic directories exist
   file:
     state: 'directory'
@@ -7,6 +11,7 @@
     owner: '{{ restic_dir_owner }}'
     group: '{{ restic_dir_group }}'
   with_items: '{{ restic_create_paths }}'
+  become: true
 
 - name: Check if downloaded binary is present
   stat:
@@ -21,6 +26,4 @@
 - name: Install restic
   include: 'install.yml'
   when: not restic_executable.stat.exists or not restic_installed.stat.exists
-
-- name: Configure restic jobs
-  include: 'configure.yml'
+  become: true

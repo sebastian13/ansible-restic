@@ -1,0 +1,7 @@
+# Start clean
+
+- name: Remove restic installed via apt
+  apt:
+    name: restic
+    state: absent
+    autoremove: yes

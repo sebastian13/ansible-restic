@@ -1,0 +1,5 @@
+# Fuse is needed to be able to mount snapshots for restore
+# Pip is needed for humanfriendly
+- name: Install requirements
+  apt:
+    name: fuse

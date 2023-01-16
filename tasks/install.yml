@@ -7,8 +7,7 @@
 - name: Download client binary
   get_url:
     url: '{{ restic_url }}'
-    dest: '{{ restic_download_path }}/restic.bz2'
-    force: True
+    dest: '{{ restic_download_path }}/restic-{{ restic_version }}.bz2'
   register: get_url_restic
 
 - name: Decompress the binary
