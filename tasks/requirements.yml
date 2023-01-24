@@ -1,5 +1,9 @@
-# Fuse is needed to be able to mount snapshots for restore
-# Pip is needed for humanfriendly
+---
+
 - name: Install requirements
-  apt:
-    name: fuse
+  ansible.builtin.apt:
+    pkg:
+    # Bzip2 is needed to decompress the binary
+    - bzip2
+    # Fuse is needed to mount snapshots for restore
+    - fuse
