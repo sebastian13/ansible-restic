@@ -12,7 +12,7 @@ This role deploys the [restic backup](https://github.com/restic/restic) binary a
   become: true
 
   roles:
-    - restic
+    - sebastian13.restic
 ```
 
 ## Ressources
