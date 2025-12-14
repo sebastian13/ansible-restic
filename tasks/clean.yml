@@ -1,7 +1,9 @@
-# Start clean
+# Start clean, remove restic installations via apt
+# as they provide mostly outdated versions
 
 - name: Remove restic installed via apt
-  apt:
+  ansible.builtin.apt:
     name: restic
     state: absent
-    autoremove: yes
+    autoremove: false
+  when: ansible_facts['pkg_mgr'] == 'apt'

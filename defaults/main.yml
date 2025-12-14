@@ -1,13 +1,14 @@
 ---
 
-restic_version: '0.16.3'
+restic_version: '0.18.1'
 restic_url: ''
 
 restic_download_path: '/opt/restic'
 restic_install_path: '/usr/local/bin'
 restic_create_paths:
-    - '{{ restic_download_path }}/bin'
     - '/etc/restic'
-    - '{{ restic_install_path }}/bin'
+restic_create_paths_apt:
+    - '{{ restic_download_path }}/bin'
+    - '{{ restic_install_path }}'
 restic_dir_owner: 'root'
 restic_dir_group: 'root'

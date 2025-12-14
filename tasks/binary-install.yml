@@ -1,0 +1,58 @@
+---
+- name: Ensure restic directories exist
+  ansible.builtin.file:
+    state: 'directory'
+    path: '{{ item }}'
+    mode: '0755'
+    owner: '{{ restic_dir_owner }}'
+    group: '{{ restic_dir_group }}'
+  with_items: '{{ restic_create_paths_apt }}'
+
+- name: Check if downloaded binary is present
+  ansible.builtin.stat:
+    path: '{{ restic_download_path }}/bin/restic-{{ restic_version }}'
+  register: restic_executable
+
+- name: Check if installed binary is present
+  ansible.builtin.stat:
+    path: '{{ restic_install_path }}/restic'
+  register: restic_installed
+
+- name: Set restic_url
+  ansible.builtin.set_fact:
+    restic_url:
+      "https://github.com/restic/restic/releases/download/v{{ restic_version }}/\
+      restic_{{ restic_version }}_{{ ansible_system | lower }}_{{ _platform_map[ansible_architecture] | default(ansible_architecture) }}.bz2"
+  when:
+    - restic_url == ''
+    - (not restic_executable.stat.exists) or (not restic_installed.stat.exists)
+
+- name: Download client binary
+  ansible.builtin.get_url:
+    url: '{{ restic_url }}'
+    dest: '{{ restic_download_path }}/restic-{{ restic_version }}.bz2'
+    mode: '0644'
+  register: get_url_restic
+  when: (not restic_executable.stat.exists) or (not restic_installed.stat.exists)
+
+- name: Decompress the binary
+  ansible.builtin.shell: "bzip2 -dc {{ get_url_restic.dest }} > {{ restic_download_path }}/bin/restic-{{ restic_version }}"
+  args:
+    creates: '{{ restic_download_path }}/bin/restic-{{ restic_version }}'
+  when: (not restic_executable.stat.exists) or (not restic_installed.stat.exists)
+
+- name: Ensure permissions are correct
+  ansible.builtin.file:
+    path: '{{ restic_download_path }}/bin/restic-{{ restic_version }}'
+    mode: '0755'
+    owner: '{{ restic_dir_owner }}'
+    group: '{{ restic_dir_group }}'
+  when: (not restic_executable.stat.exists) or (not restic_installed.stat.exists)
+
+- name: Create symbolic link to the correct version
+  ansible.builtin.file:
+    src: '{{ restic_download_path }}/bin/restic-{{ restic_version }}'
+    path: '{{ restic_install_path }}/restic'
+    state: link
+    force: true
+  when: (not restic_executable.stat.exists) or (not restic_installed.stat.exists)
