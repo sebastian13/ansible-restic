@@ -1,6 +1,6 @@
 ---
 
-restic_version: '0.18.1'
+restic_version: '0.19.1'
 restic_url: ''
 
 restic_download_path: '/opt/restic'
