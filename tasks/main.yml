@@ -1,21 +1,20 @@
 ---
-
 - name: Remove conflicting restic installations
-  ansible.builtin.include_tasks: 'clean.yml'
+  ansible.builtin.include_tasks: "clean.yml"
 - name: Install required packages
-  ansible.builtin.include_tasks: 'requirements.yml'
+  ansible.builtin.include_tasks: "requirements.yml"
 
 - name: Ensure restic directories exist
   ansible.builtin.file:
-    state: 'directory'
-    path: '{{ item }}'
-    mode: '0755'
-    owner: '{{ restic_dir_owner }}'
-    group: '{{ restic_dir_group }}'
-  with_items: '{{ restic_create_paths }}'
+    state: "directory"
+    path: "{{ item }}"
+    mode: "0755"
+    owner: "{{ restic_dir_owner }}"
+    group: "{{ restic_dir_group }}"
+  with_items: "{{ restic_create_paths }}"
 
 - name: Install restic from binary on apt based systems
-  ansible.builtin.include_tasks: 'binary-install.yml'
+  ansible.builtin.include_tasks: "binary-install.yml"
   when: ansible_facts['pkg_mgr'] == 'apt'
 
 - name: Install restic via package manager on apk based systems
@@ -25,10 +24,10 @@
   when: ansible_facts['pkg_mgr'] == 'apk'
 
 - name: Verify restic installation
-  ansible.builtin.command: 'restic version'
+  ansible.builtin.command: "restic version"
   register: restic_version_output
   changed_when: false
   failed_when: restic_version_output.rc != 0
 - name: Show restic version
   ansible.builtin.debug:
-    msg: '{{ restic_version_output.stdout }}'
+    msg: "{{ restic_version_output.stdout }}"

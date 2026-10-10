@@ -1,3 +1,4 @@
+---
 # Start clean, remove restic installations via apt
 # as they provide mostly outdated versions
 

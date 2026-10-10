@@ -1,5 +1,4 @@
 ---
-
 - name: Install requirements
   ansible.builtin.package:
     name:
