@@ -20,8 +20,12 @@
 
 - name: Set restic_url
   ansible.builtin.set_fact:
-    restic_url: "https://github.com/restic/restic/releases/download/v{{ restic_version }}/restic_{{ restic_version }}_{{ ansible_system | lower }}_{{ _platform_map[ansible_architecture]
-      | default(ansible_architecture) }}.bz2"
+    restic_arch: >-
+      {{ _platform_map[ansible_facts["architecture"]]
+      | default(ansible_facts["architecture"]) }}
+    restic_url: >-
+      https://github.com/restic/restic/releases/download/v{{ restic_version }}/
+      restic_{{ restic_version }}_{{ ansible_facts["system"] | lower }}_{{ restic_arch }}.bz2
   when:
     - restic_url == ''
     - (not restic_executable.stat.exists) or (not restic_installed.stat.exists)

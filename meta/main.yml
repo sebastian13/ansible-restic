@@ -1,6 +1,7 @@
 ---
 
 galaxy_info:
+  namespace: "sebastian13"
   role_name: "restic"
   author: "Sebastian Plocek"
   description: "Deploys the restic backup binary after installing all requirements."
@@ -16,7 +17,7 @@ galaxy_info:
         - "trixie"
     - name: "Alpine"
       versions:
-        - "3.23"
+        - "all"
 
   galaxy_tags:
     - "backup"
